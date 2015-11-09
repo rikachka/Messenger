@@ -5,6 +5,8 @@ import java.util.*;
 /**
  * Created by rikachka on 07.11.15.
  */
+
+// TODO: Нужен инетрфейс
 public class Chats {
     private Map<Long, Chat> chats = new HashMap<>();
     private Map<Long, Set<Long>> userChats = new HashMap<>();

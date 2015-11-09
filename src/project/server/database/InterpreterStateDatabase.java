@@ -11,9 +11,13 @@ import project.server.database.utils.Utils;
 import java.io.PrintWriter;
 import java.util.Set;
 
+
+// TODO:  по имени класса абсолютно непонятно чем он занимается
 public class InterpreterStateDatabase {
     private SessionManager sessionManager;
     private User user;
+
+    // FIXME: публичный доступ?
     public PrintWriter out;
     private Set<DatabaseCommand> commands;
 

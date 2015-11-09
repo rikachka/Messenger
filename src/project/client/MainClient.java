@@ -11,6 +11,9 @@ public class MainClient {
         BufferedReader in  = new BufferedReader(new InputStreamReader(System.in));
         PrintWriter out = new PrintWriter(System.out, true);
 
+
+        // TODO: для чего вообще нужен Interpreter? Его же можно разнести
+        // на 2 части - обработка консоли здесь, а остальное в Commander
         Interpreter interpreter = new Interpreter(in, out);
         interpreter.setDefaultCommand(new SendCommand());
         interpreter.addCommand(new ConnectCommand());
@@ -26,6 +29,7 @@ public class MainClient {
                 if (state.isConnected()) {
                     try {
                         state.disconnect();
+                        // FIXME: check that in/out isn't null
                         out.close();
                         in.close();
                     } catch (Exception e) {

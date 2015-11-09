@@ -14,7 +14,8 @@ public class InterpreterDatabase {
     private CommanderDatabase commander = new CommanderDatabase();
     BufferedReader in;
     PrintWriter out;
-    
+
+    // TODO: вызывается в каждом треде, зачем? И на каждый тред у вас создается CommandDatabase
     public InterpreterDatabase(BufferedReader in, PrintWriter out) {
         this.in = in;
         this.out = out;

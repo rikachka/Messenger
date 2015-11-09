@@ -28,6 +28,8 @@ public class ClientAcceptorThread extends Thread {
             Set<DatabaseCommand> commands = interpreter.getCommands();
             InterpreterStateDatabase state = new InterpreterStateDatabase(sessionManager, out, commands);
             interpreter.interactiveMode(state);
+
+            // FIXME: close resources in finally
             out.close();
             in.close();
             clientSocket.close();

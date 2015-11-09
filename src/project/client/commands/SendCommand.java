@@ -19,6 +19,8 @@ public class SendCommand implements Command {
         state.toServerStream.println(commandToServer);
         try {
             Thread.sleep(100);
+
+            // TODO: судя по всему клиент не асинхронный. В примере чтение из сокета было в отдельном потоке
             do {
                 String answerFromServer = state.fromServerStream.readLine();
                 state.out.println(answerFromServer);

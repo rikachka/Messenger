@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.util.List;
 
+// TODO: тоже дублирование
 public class InterpreterStateServer {
     private SessionManager sessionManager;
     public PrintWriter out;

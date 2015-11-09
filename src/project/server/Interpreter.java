@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+
+// TODO: вроде дублирует клиента
 public class Interpreter {
     private Commander commander = new Commander();
     BufferedReader in;

@@ -6,6 +6,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+
+// Добавьте коментарии к классу, что он делает
+
+// TODO: по смыслу это больше похоже на сессию, может назвать класс Session?
 public class InterpreterState {
     public PrintWriter out;
     private boolean connected = false;
@@ -35,6 +39,8 @@ public class InterpreterState {
     public void disconnect() throws Exception {
         try {
             toServerStream.println("exit");
+
+            // FIXME: null-checking
             fromServerStream.close();
             toServerStream.close();
             socket.close();

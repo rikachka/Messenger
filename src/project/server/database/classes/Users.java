@@ -7,6 +7,8 @@ import java.util.Map;
 /**
  * Created by rikachka on 07.11.15.
  */
+
+// TODO: Нужен инетрфейс
 public class Users {
     final private String BASIC_PASSWORD = "0";
 

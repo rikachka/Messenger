@@ -13,6 +13,9 @@ import java.io.FileReader;
  * Created by rikachka on 08.11.15.
  */
 public class LoadDatabase {
+
+
+    // TODO: почему все методы статические?
     public static void start(SessionManager sessionManager) throws Exception {
         File databaseDir = sessionManager.getDatabaseDir();
         Utils.createDir(databaseDir);

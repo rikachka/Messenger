@@ -9,6 +9,8 @@ import java.nio.file.Paths;
 /**
  * Created by rikachka on 07.11.15.
  */
+
+// TODO: большая часть утилит есть в стандартных классах
 public class Utils {
     public static boolean checkUserAuthorised(InterpreterStateDatabase state) {
         if (state.getUser() == null) {

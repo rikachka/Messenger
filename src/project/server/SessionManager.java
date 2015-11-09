@@ -19,6 +19,8 @@ public class SessionManager {
     private Users users = new Users();
     private Chats chats = new Chats();
     private Map<Long, PrintWriter> clients = new HashMap<>();
+
+    // TODO: нам не надо знать ни про файлы ни про БД. Все должно быть спрятано за интерфейс
     private File databaseDir;
 
     public SessionManager() throws Exception {

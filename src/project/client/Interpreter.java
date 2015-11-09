@@ -6,8 +6,11 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+
+// Добавьте коментарии к классу, что он делает
 public class Interpreter {
     private Commander commander = new Commander();
+    // FIXME: set field visibility - private/public/???
     BufferedReader in;
     PrintWriter out;
     

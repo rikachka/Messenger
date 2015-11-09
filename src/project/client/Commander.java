@@ -4,6 +4,8 @@ import project.client.commands.Command;
 
 import java.util.HashMap;
 
+// TODO: Может лучше назвать CommandHandler?
+// слово Commander переводится Командир, немного не то тсмысл
 public class Commander {
     
     private HashMap<String, Command> allCommands = new HashMap<>();
