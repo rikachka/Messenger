@@ -29,14 +29,14 @@ public class MainServer {
             System.err.println(e.getMessage());
             System.exit(1);
         }
-        InterpreterStateServer state = new InterpreterStateServer(sessionManager, out);
+        Session session = new Session(sessionManager, out);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                if (state.isStarted()) {
+                if (session.isStarted()) {
                     try {
-                        state.stop();
+                        session.stop();
                         out.close();
                         in.close();
                     } catch (Exception e) {
@@ -46,6 +46,6 @@ public class MainServer {
             }
         });
 
-        interpreter.interactiveMode(state);
+        interpreter.interactiveMode(session);
     }
 }

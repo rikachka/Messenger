@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 // TODO: вроде дублирует клиента
 public class Interpreter {
-    private Commander commander = new Commander();
+    private CommandHandlerServer commandHandlerServer = new CommandHandlerServer();
     BufferedReader in;
     PrintWriter out;
     
@@ -19,14 +19,14 @@ public class Interpreter {
     }
     
     public void addCommand(Command command) {
-        commander.addCommand(command);
+        commandHandlerServer.addCommand(command);
     }
     
-    public void interactiveMode(InterpreterStateServer state) {
+    public void interactiveMode(Session session) {
         Scanner inScanner = new Scanner(in);
 
         try {
-            commander.startCommand(state, "start");
+            commandHandlerServer.startCommand(session, "start");
         } catch (Exception e) {
             out.println(e.getMessage());
         }
@@ -41,7 +41,7 @@ public class Interpreter {
                 break;
             }
             try {
-                batchMode(state, input);
+                commandHandlerServer.startCommand(session, input);
 //            } catch (DataBaseException e) {
 //                out.println(e.getMessage());
 //                System.exit(1);
@@ -50,13 +50,6 @@ public class Interpreter {
             } catch (Exception e) {
                 out.println(e.getMessage());
             }
-        }
-    }
-    
-    public void batchMode(InterpreterStateServer state, String arg) throws Exception {
-        String[] commands = arg.split(";");
-        for (String command : commands) {
-            commander.startCommand(state, command);
         }
     }
 }

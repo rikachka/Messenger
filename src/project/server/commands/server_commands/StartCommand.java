@@ -1,6 +1,6 @@
 package project.server.commands.server_commands;
 
-import project.server.InterpreterStateServer;
+import project.server.Session;
 import project.server.commands.Command;
 
 import java.io.IOException;
@@ -9,9 +9,9 @@ import java.net.ServerSocket;
 public class StartCommand implements Command {
     int port = 10001;
 
-    public void execute(InterpreterStateServer state, String[] args) throws Exception {
-        if (state.isStarted()) {
-            state.out.println("not started: already started");
+    public void execute(Session session, String[] args) throws Exception {
+        if (session.isStarted()) {
+            session.out.println("not started: already started");
             return;
         }
 
@@ -27,12 +27,12 @@ public class StartCommand implements Command {
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
-            state.out.println("not started: wrong port number or it is already busy");
+            session.out.println("not started: wrong port number or it is already busy");
             return;
         }
 
-        state.start(port, serverSocket);
-        state.out.println("started at port " + port);
+        session.start(port, serverSocket);
+        session.out.println("started at port " + port);
     }
     
     public String name() {

@@ -1,13 +1,10 @@
 package project.client.commands;
 
-import project.client.InterpreterState;
+import project.client.Session;
 
 public class ExitCommand implements Command {
-    public void execute(InterpreterState state, String[] args) throws Exception {
-        if (!state.isConnected()) {
-            System.exit(0);
-        }
-        state.disconnect();
+    public void execute(Session session, String[] args) throws Exception {
+        session.disconnect();
         System.exit(0);
     }
     

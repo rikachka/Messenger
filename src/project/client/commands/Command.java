@@ -1,9 +1,9 @@
 package project.client.commands;
 
-import project.client.InterpreterState;
+import project.client.Session;
 
 public interface Command {
-    void execute(InterpreterState state, String[] args) throws Exception;
+    void execute(Session session, String[] args) throws Exception;
     
     String name();
     

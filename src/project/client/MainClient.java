@@ -1,54 +1,68 @@
 package project.client;
 
 import project.client.commands.*;
+import project.client.exceptions.NotCriticalException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Scanner;
 
 public class MainClient {
+    public static final String HOST = "127.0.0.1";
+    public static final int PORT = 10001;
+
     public static void main(String[] args) {
-        BufferedReader in  = new BufferedReader(new InputStreamReader(System.in));
+        Scanner inScanner  = new Scanner(new BufferedReader(new InputStreamReader(System.in)));
         PrintWriter out = new PrintWriter(System.out, true);
+        PrintWriter err = new PrintWriter(System.err, true);
 
+        CommandHandler commandHandler = new CommandHandler();
+        addCommands(commandHandler);
 
-        // TODO: для чего вообще нужен Interpreter? Его же можно разнести
-        // на 2 части - обработка консоли здесь, а остальное в Commander
-        Interpreter interpreter = new Interpreter(in, out);
-        interpreter.setDefaultCommand(new SendCommand());
-        interpreter.addCommand(new ConnectCommand());
-        interpreter.addCommand(new DisconnectCommand());
-        interpreter.addCommand(new WhereamiCommand());
-        interpreter.addCommand(new ExitCommand());
-
-        InterpreterState state = new InterpreterState(out);
+        Session session = new Session(out, err);
+        try {
+            session.connect(HOST, PORT);
+        } catch (Exception e) {
+            err.println(e.getMessage());
+            System.exit(1);
+        }
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                if (state.isConnected()) {
-                    try {
-                        state.disconnect();
-                        // FIXME: check that in/out isn't null
-                        out.close();
-                        in.close();
-                    } catch (Exception e) {
-                        System.err.println("Can't stop the client");
-                    }
+                try {
+                    session.disconnect();
+                    out.close();
+                    inScanner.close();
+                } catch (Exception e) {
+                    System.err.println("Can't stop the client");
                 }
             }
         });
 
-        if (args.length == 0) {
-            interpreter.interactiveMode(state);
-        } else {
-            String wholeArgument = Utils.concatStrings(args, " ");
+        //out.print("$ ");
+        //out.flush();
+        out.println("Welcome to the chat!");
+        while (inScanner.hasNextLine()) {
+            String input;
+            input = inScanner.nextLine();
             try {
-                interpreter.batchMode(state, wholeArgument);
+                commandHandler.startCommand(session, input);
+            } catch (NotCriticalException e) {
+                System.out.println(e.getMessage());
             } catch (Exception e) {
                 System.err.println(e.getMessage());
                 System.exit(1);
             }
+            //out.print("$ ");
+            //out.flush();
         }
+    }
+
+    private static void addCommands(CommandHandler commandHandler) {
+        commandHandler.setDefaultCommand(new SendCommand());
+        commandHandler.addCommand(new ExitCommand());
     }
 }

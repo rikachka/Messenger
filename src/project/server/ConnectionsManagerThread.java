@@ -1,6 +1,6 @@
 package project.server;
 
-import project.server.database.ClientAcceptorThread;
+import project.server.work_with_client.ClientAcceptorThread;
 
 import java.io.IOException;
 import java.net.ServerSocket;

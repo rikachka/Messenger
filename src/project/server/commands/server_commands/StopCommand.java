@@ -1,17 +1,17 @@
 package project.server.commands.server_commands;
 
-import project.server.InterpreterStateServer;
+import project.server.Session;
 import project.server.commands.Command;
 
 public class StopCommand implements Command {
-    public void execute(InterpreterStateServer state, String[] args) throws Exception {
-        if (!state.isStarted()) {
-            state.out.println("not started");
+    public void execute(Session session, String[] args) throws Exception {
+        if (!session.isStarted()) {
+            session.out.println("not started");
             return;
         }
 
-        int port = state.stop();
-        state.out.println("stopped at port " + port);
+        int port = session.stop();
+        session.out.println("stopped at port " + port);
     }
     
     public String name() {

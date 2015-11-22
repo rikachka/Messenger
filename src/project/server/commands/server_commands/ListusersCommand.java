@@ -1,23 +1,23 @@
 package project.server.commands.server_commands;
 
-import project.server.InterpreterStateServer;
+import project.server.Session;
 import project.server.commands.Command;
-import project.server.database.ClientAcceptorThread;
+import project.server.work_with_client.ClientAcceptorThread;
 
 import java.util.List;
 
 public class ListusersCommand implements Command {
-    public void execute(InterpreterStateServer state, String[] args) {
-        if (!state.isStarted()) {
-            state.out.println("not started");
+    public void execute(Session session, String[] args) {
+        if (!session.isStarted()) {
+            session.out.println("not started");
             return;
         }
-        int port = state.getPort();
-        List<ClientAcceptorThread> clientAcceptors = state.getClientAcceptors();
+        int port = session.getPort();
+        List<ClientAcceptorThread> clientAcceptors = session.getClientAcceptors();
         for (ClientAcceptorThread clientAcceptor: clientAcceptors) {
             if  (clientAcceptor.isAlive()) {
                 String host = clientAcceptor.clientSocket.getInetAddress().getHostName();
-                state.out.println(host + ":" + port);
+                session.out.println(host + ":" + port);
             }
         }
     }

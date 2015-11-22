@@ -1,12 +1,12 @@
 package project.server.commands.server_commands;
 
-import project.server.InterpreterStateServer;
+import project.server.Session;
 import project.server.commands.Command;
 
 public class ExitCommand implements Command {
-    public void execute(InterpreterStateServer state, String[] args) throws Exception {
-        if (state.isStarted()) {
-            state.stop();
+    public void execute(Session session, String[] args) throws Exception {
+        if (session.isStarted()) {
+            session.stop();
         }
         System.exit(0);
     }
