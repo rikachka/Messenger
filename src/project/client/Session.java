@@ -8,7 +8,6 @@ import java.io.*;
 import java.net.Socket;
 
 
-// Добавьте коментарии к классу, что он делает
 public class Session {
     public PrintWriter out;
     public PrintWriter err;
@@ -42,8 +41,6 @@ public class Session {
             serverAnswersThread.interrupt();
             serverAnswersThread.join();
             socketStream.close();
-//            fromServerStream.close();
-//            toServerStream.close();
             socket.close();
         } catch (Exception e) {
             throw new CriticalException("Can't disconnect");

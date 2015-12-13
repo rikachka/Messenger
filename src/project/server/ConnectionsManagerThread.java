@@ -37,16 +37,6 @@ public class ConnectionsManagerThread extends Thread {
             System.out.println("Can't accept");
             System.exit(-1);
         }
-        for (Thread thread: clientAcceptors) {
-            thread.interrupt();
-        }
-        for (Thread thread: clientAcceptors) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                // it will never happen
-            }
-        }
     }
 
     public List<ClientAcceptorThread> getClientAcceptors() {

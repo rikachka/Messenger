@@ -28,13 +28,28 @@ public class Session {
     }
 
     public int stop() throws Exception {
-        started = false;
-        connectionsManager.interrupt();
-        try {
-            connectionsManager.join();
-            serverSocket.close();
-        } catch (Exception e) {
-            throw new Exception("Error while stopping the server");
+        if (isStarted()) {
+            started = false;
+
+            List<ClientAcceptorThread> clientAcceptors = connectionsManager.getClientAcceptors();
+            for (Thread thread: clientAcceptors) {
+                thread.interrupt();
+            }
+            for (Thread thread: clientAcceptors) {
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    System.err.println("Interrupted exception while joining the thread");
+                }
+            }
+
+            connectionsManager.interrupt();
+            try {
+                connectionsManager.join();
+                serverSocket.close();
+            } catch (Exception e) {
+                throw new Exception("Error while stopping the server");
+            }
         }
         return port;
     }
