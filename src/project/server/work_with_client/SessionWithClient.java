@@ -4,17 +4,13 @@ import project.common.messages.MessageType;
 import project.common.messages.Message;
 import project.common.messages.SocketStream;
 import project.server.SessionManager;
-import project.server.work_with_client.classes.Chat;
-import project.server.work_with_client.classes.Chats;
-import project.server.work_with_client.classes.User;
-import project.server.work_with_client.classes.Users;
+import project.server.work_with_client.classes.*;
 import project.server.work_with_client.commands.ClientCommand;
+import project.server.work_with_client.database.exceptions.DataAccessException;
 import project.server.work_with_client.utils.Utils;
 
 import java.util.Set;
 
-
-// TODO:  по имени класса абсолютно непонятно чем он занимается
 public class SessionWithClient {
     private SessionManager sessionManager;
     private User user;
@@ -31,7 +27,7 @@ public class SessionWithClient {
         return sessionManager;
     }
 
-    public Users users() {
+    public UserStore users() {
         return sessionManager.getUsers();
     }
 
@@ -39,19 +35,19 @@ public class SessionWithClient {
         return user;
     }
 
-    public User getUser(Long id) {
+    public User getUser(Long id) throws DataAccessException {
         return users().getUser(id);
     }
 
-    public void setUser(String login) {
+    public void setUser(String login) throws DataAccessException {
         if (users().getUser(login) == null) {
             user = users().createUser(login);
-            chats().createChats(user.getId());
+//            chats().createChats(user.getId());
             sessionManager.loginUser(user.getId(), this);
         }
     }
 
-    public void setUser(String login, String password) {
+    public void setUser(String login, String password) throws DataAccessException {
         user = users().getUser(login, password);
         if (user != null) {
             sessionManager.loginUser(user.getId(), this);
@@ -63,13 +59,9 @@ public class SessionWithClient {
         user = null;
     }
 
-//    public void saveUser() {
-//        users().setUser(user);
-//    }
+    public MessageStore chats() { return sessionManager.getChats(); }
 
-    public Chats chats() { return sessionManager.getChats(); }
-
-    public Chat getUserChat(String id) {
+    public Chat getUserChat(String id) throws DataAccessException {
         Long chatId;
         try {
             chatId = new Long(id);

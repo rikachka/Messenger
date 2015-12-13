@@ -1,32 +1,26 @@
 package project.server.work_with_client.classes;
 
+import project.server.work_with_client.database.IdentifiedObject;
+
 /**
  * Created by rikachka on 07.11.15.
  */
-public class User {
+public class User implements IdentifiedObject {
     private Long id;
     private String login;
-    private String nickname = "";
     private String password;
+    private String nickname = "";
 
-    User(Long id, String login, String password) {
-        this.id = id;
+    User(String login, String password) {
         this.login = login;
         this.password = password;
     }
 
-    public User(String[] userInfo) throws Exception {
-        if (userInfo.length != 4) {
-            throw new Exception("creating user: wrong number of fields - " + userInfo.length);
-        }
-        try {
-            id = new Long(userInfo[0]);
-        } catch (Exception e) {
-            throw new Exception("creating user: wrong format of arguments");
-        }
-        login = userInfo[1];
-        nickname = userInfo[2];
-        password = userInfo[3];
+    public User(Long id, String login, String password, String nickname) {
+        this.id = id;
+        this.login = login;
+        this.password = password;
+        this.nickname = nickname;
     }
 
     public Long getId() {
@@ -41,12 +35,16 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getNickname() {
         return nickname;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setNickname(String nickname) {

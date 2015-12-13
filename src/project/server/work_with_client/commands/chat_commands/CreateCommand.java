@@ -2,8 +2,7 @@ package project.server.work_with_client.commands.chat_commands;
 
 import project.server.work_with_client.SessionWithClient;
 import project.server.work_with_client.classes.Chat;
-import project.server.work_with_client.commands.ClientCommand;
-import project.server.work_with_client.commands.ClientCommandMy;
+import project.server.work_with_client.commands.ClientCommandAbstract;
 import project.server.work_with_client.utils.Utils;
 
 import java.util.HashSet;
@@ -12,7 +11,7 @@ import java.util.Set;
 /**
  * Created by rikachka on 07.11.15.
  */
-public class CreateCommand extends ClientCommandMy {
+public class CreateCommand extends ClientCommandAbstract {
     public void run(SessionWithClient session, String[] args) throws Exception {
         beforeRunning();
         if (!Utils.checkUserAuthorised(session)) {

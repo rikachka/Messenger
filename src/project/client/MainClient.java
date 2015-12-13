@@ -1,6 +1,7 @@
 package project.client;
 
 import project.client.commands.*;
+import project.client.exceptions.CriticalException;
 import project.client.exceptions.NotCriticalException;
 
 import java.io.BufferedReader;
@@ -51,8 +52,8 @@ public class MainClient {
             try {
                 commandHandler.startCommand(session, input);
             } catch (NotCriticalException e) {
-                System.out.println(e.getMessage());
-            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            } catch (CriticalException e) {
                 System.err.println(e.getMessage());
                 System.exit(1);
             }

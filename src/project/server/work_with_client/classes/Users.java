@@ -1,63 +1,39 @@
 package project.server.work_with_client.classes;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import project.server.work_with_client.database.DaoUser;
+import project.server.work_with_client.database.exceptions.DataAccessException;
 
 /**
  * Created by rikachka on 07.11.15.
  */
 
-// TODO: Нужен инетрфейс
-public class Users {
+public class Users implements UserStore {
     final private String BASIC_PASSWORD = "0";
+    private DaoUser daoUser;
 
-    private Map<Long, User> users = new HashMap<>();
-    private Map<String, Long> logins = new HashMap<>();
+    public Users(DaoUser daoUser) {
+        this.daoUser = daoUser;
+    }
 
-    public User createUser(String login) {
-        long createdId = users.size() + 1;
-        User createdUser = new User(createdId, login, BASIC_PASSWORD);
-        users.put(createdId, createdUser);
-        logins.put(login, createdId);
+    public User createUser(String login) throws DataAccessException {
+        User createdUser = new User(login, BASIC_PASSWORD);
+        daoUser.insert(createdUser);
         return createdUser;
     }
 
-    public User getUser(Long id) {
-        User user = null;
-        if (users.containsKey(id)) {
-            user = users.get(id);
-        }
-        return user;
+    public User getUser(Long id) throws DataAccessException {
+        return daoUser.getById(id);
     }
 
-    public User getUser(String login) {
-        User user = null;
-        if (logins.containsKey(login)) {
-            Long userId = logins.get(login);
-            user = users.get(userId);
-        }
-        return user;
+    public User getUser(String login) throws DataAccessException {
+        return daoUser.getByLogin(login);
     }
 
-    public User getUser(String login, String password) {
-        User user = null;
-        if (logins.containsKey(login)) {
-            long userId = logins.get(login);
-            String rightPassword = users.get(userId).getPassword();
-            if (password.equals(rightPassword)) {
-                user = users.get(userId);
-            }
-        }
-        return user;
+    public User getUser(String login, String password) throws DataAccessException {
+        return daoUser.getByLoginAndPassword(login, password);
     }
 
-    public void addUser(User user) {
-        users.put(user.getId(), user);
-        logins.put(user.getLogin(), user.getId());
-    }
-
-    public Collection<User> getUsers() {
-        return users.values();
+    public void updateUser(User user) throws DataAccessException {
+        daoUser.update(user);
     }
 }

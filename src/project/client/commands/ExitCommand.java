@@ -1,9 +1,10 @@
 package project.client.commands;
 
 import project.client.Session;
+import project.client.exceptions.CriticalException;
 
 public class ExitCommand implements Command {
-    public void execute(Session session, String[] args) throws Exception {
+    public void execute(Session session, String[] args) throws CriticalException {
         session.disconnect();
         System.exit(0);
     }

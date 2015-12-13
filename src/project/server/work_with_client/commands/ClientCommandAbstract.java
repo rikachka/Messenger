@@ -5,7 +5,7 @@ import project.server.work_with_client.SessionWithClient;
 /**
  * Created by rikachka on 20.11.15.
  */
-public abstract class ClientCommandMy implements ClientCommand {
+public abstract class ClientCommandAbstract implements ClientCommand {
     protected String answer = "";
     //protected SessionWithClient session;
 

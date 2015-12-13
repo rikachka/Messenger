@@ -4,8 +4,6 @@ import project.server.commands.Command;
 
 import java.util.HashMap;
 
-
-//TODO: можно же использовать тот, что в клиенте. Это дублирование кода
 public class CommandHandlerServer {
     
     private HashMap<String, Command> allCommands = new HashMap<>();

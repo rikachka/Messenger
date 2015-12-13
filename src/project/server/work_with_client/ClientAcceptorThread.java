@@ -25,10 +25,6 @@ public class ClientAcceptorThread extends Thread {
             SessionWithClient session = new SessionWithClient(sessionManager, socketStream, commands);
             //System.out.println("Client accepted");
             interpreter.interactiveMode(session);
-
-            // FIXME: close resources in finally
-//            out.close();
-//            in.close();
             clientSocket.close();
         } catch (Exception e) {
             System.out.println("Exception in thread");

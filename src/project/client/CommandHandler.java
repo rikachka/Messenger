@@ -1,6 +1,7 @@
 package project.client;
 
 import project.client.commands.Command;
+import project.client.exceptions.CriticalException;
 import project.client.exceptions.NotCriticalException;
 
 import java.util.HashMap;
@@ -20,7 +21,7 @@ public class CommandHandler {
         defaultCommand = command;
     }
 
-    public void startCommand(Session session, String commandWithArgs) throws Exception {
+    public void startCommand(Session session, String commandWithArgs) throws NotCriticalException, CriticalException {
         String[] args;
         if (commandWithArgs.startsWith(SEND_COMMAND_PREFIX)) {
             args = commandWithArgs.trim().split(PARAM_DELIMITER, 2);
@@ -37,8 +38,10 @@ public class CommandHandler {
         }
         try {
             command.execute(session, args);
-        } catch (Exception e) {
-            throw new Exception(command.name() + ": " + e.getMessage());
+        } catch (NotCriticalException e) {
+            throw new NotCriticalException(command.name() + ": " + e.getMessage());
+        } catch (CriticalException e) {
+            throw new CriticalException(command.name() + ": " + e.getMessage());
         }
     }
 }

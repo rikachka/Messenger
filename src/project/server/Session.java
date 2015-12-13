@@ -1,7 +1,6 @@
 package project.server;
 
 import project.server.work_with_client.ClientAcceptorThread;
-import project.server.work_with_client.file_system.SaveDatabase;
 
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -34,7 +33,6 @@ public class Session {
         try {
             connectionsManager.join();
             serverSocket.close();
-            SaveDatabase.start(sessionManager);
         } catch (Exception e) {
             throw new Exception("Error while stopping the server");
         }

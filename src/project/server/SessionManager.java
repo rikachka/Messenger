@@ -3,36 +3,29 @@ package project.server;
 import project.common.messages.MessageType;
 import project.common.messages.Message;
 import project.server.work_with_client.SessionWithClient;
-import project.server.work_with_client.classes.Chat;
-import project.server.work_with_client.classes.ChatMessage;
-import project.server.work_with_client.classes.Chats;
-import project.server.work_with_client.classes.Users;
+import project.server.work_with_client.classes.*;
 import project.server.work_with_client.commands.ClientCommand;
 import project.server.work_with_client.commands.chat_commands.*;
 import project.server.work_with_client.commands.other_commands.HelpCommand;
 import project.server.work_with_client.commands.user_commands.*;
-import project.server.work_with_client.file_system.LoadDatabase;
-import project.server.work_with_client.utils.Constants;
-import project.server.work_with_client.utils.Utils;
+import project.server.work_with_client.database.*;
+import project.server.work_with_client.database.exceptions.DataAccessException;
 
-import java.io.File;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class SessionManager {
-    private Users users = new Users();
-    private Chats chats = new Chats();
+    private TableProvider tableProvider;
+    private UserStore users;
+    private MessageStore chats;
     private Map<Long, SessionWithClient> clients = new HashMap<>();
     private CommandHandlerClient commandHandler = new CommandHandlerClient();
 
-    // TODO: нам не надо знать ни про файлы ни про БД. Все должно быть спрятано за интерфейс
-    private File databaseDir;
-
     public SessionManager() throws Exception {
-        databaseDir = Utils.makePathAbsolute(Constants.DATABASE_DIR).toFile();
-        LoadDatabase.start(this);
+        tableProvider = new TableProvider();
+        users = new Users(new DaoUser(tableProvider));
+        chats = new Chats(new DaoChat(tableProvider), new DaoChatMessage(tableProvider), new DaoChatParticipant(tableProvider));
 
         addCommand(new RegistrateCommand());
         addCommand(new LoginCommand());
@@ -54,13 +47,11 @@ public class SessionManager {
         commandHandler.addCommand(command);
     }
 
-    public Users getUsers() {
+    public UserStore getUsers() {
         return users;
     }
 
-    public Chats getChats() { return chats; }
-
-    public File getDatabaseDir() { return databaseDir; }
+    public MessageStore getChats() { return chats; }
 
     public CommandHandlerClient getCommandHandler() {
         return commandHandler;
@@ -74,9 +65,8 @@ public class SessionManager {
         clients.remove(userId);
     }
 
-    public void sendMessage(Chat chat, ChatMessage chatMessage) {
-        Set<Long> receivers = new HashSet<>();
-        receivers.addAll(chat.getParticipants());
+    public void sendMessage(Chat chat, ChatMessage chatMessage) throws DataAccessException {
+        Set<Long> receivers = chats.getChatParticipants(chat.getId());
         receivers.remove(chatMessage.getSenderId());
         clients.keySet().forEach(user -> {
             if (receivers.contains(user)) {
@@ -86,9 +76,8 @@ public class SessionManager {
         });
     }
 
-    public void sendChatWelcome(Chat chat, Long userId) {
-        Set<Long> receivers = new HashSet<>();
-        receivers.addAll(chat.getParticipants());
+    public void sendChatWelcome(Chat chat, Long userId) throws DataAccessException {
+        Set<Long> receivers = chats.getChatParticipants(chat.getId());
         receivers.remove(userId);
         clients.keySet().forEach(user -> {
             if (receivers.contains(user)) {

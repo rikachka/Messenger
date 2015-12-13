@@ -2,8 +2,7 @@ package project.server.work_with_client.commands.chat_commands;
 
 import project.server.work_with_client.SessionWithClient;
 import project.server.work_with_client.classes.Chat;
-import project.server.work_with_client.commands.ClientCommand;
-import project.server.work_with_client.commands.ClientCommandMy;
+import project.server.work_with_client.commands.ClientCommandAbstract;
 import project.server.work_with_client.utils.Utils;
 
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.List;
 /**
  * Created by rikachka on 07.11.15.
  */
-public class FindCommand extends ClientCommandMy {
+public class FindCommand extends ClientCommandAbstract {
     public void run(SessionWithClient session, String[] args) throws Exception {
         beforeRunning();
         if (!Utils.checkUserAuthorised(session)) {
@@ -24,7 +23,7 @@ public class FindCommand extends ClientCommandMy {
         }
 
         String searching = args[1];
-        List<String> messages = chat.getMessagesTexts(searching);
+        List<String> messages = session.chats().getMessagesTexts(chat, searching);
         if (messages.size() == 0) {
             writeln("no messages were found");
         } else {

@@ -3,14 +3,13 @@ package project.server.work_with_client.commands.chat_commands;
 import project.server.work_with_client.SessionWithClient;
 import project.server.work_with_client.classes.Chat;
 import project.server.work_with_client.classes.ChatMessage;
-import project.server.work_with_client.commands.ClientCommand;
-import project.server.work_with_client.commands.ClientCommandMy;
+import project.server.work_with_client.commands.ClientCommandAbstract;
 import project.server.work_with_client.utils.Utils;
 
 /**
  * Created by rikachka on 07.11.15.
  */
-public class SendCommand extends ClientCommandMy {
+public class SendCommand extends ClientCommandAbstract {
     public void run(SessionWithClient session, String[] args) throws Exception {
         beforeRunning();
         if (!Utils.checkUserAuthorised(session)) {
@@ -23,7 +22,7 @@ public class SendCommand extends ClientCommandMy {
         }
 
         String text = args[1];
-        ChatMessage chatMessage = chat.addMessage(session.getUser().getId(), text);
+        ChatMessage chatMessage = session.chats().addMessage(chat, session.getUser().getId(), text);
         session.getSessionManager().sendMessage(chat, chatMessage);
         //writeln("the message was sent");
         writeToClient(session);
